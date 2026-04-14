@@ -46,7 +46,8 @@ def cli_raw():
 @click.option("--today/--no-today", default=False, help="Include/exclude data from today. The default is False.")
 @click.option("--keep/--no-keep", default=False, help="Keep original file. The default is False.")
 def gzip_raw( input_files: str, config, today:bool, keep:bool):
-    """Compress raw files, exclude today and remove original file by default.
+    """Compress raw files.
+    Exclude today and remove original file by default.
     """
     config = shrad.utils.merge_config(config)
     shrad.utils.init_logger(config)
@@ -69,13 +70,7 @@ def gzip_raw( input_files: str, config, today:bool, keep:bool):
                 continue
             shrad.futils.gzip_raw(fname=fn,keep=keep)
 
-pass_ns = click.make_pass_decorator(dict, ensure=True)
-@cli_raw.group("process", chain=True)
-@click.argument("input_files", nargs=-1)
-@click.option("--config", "-c", type=click.Path(dir_okay=False, exists=True),
-              help="Config file - will merge and override the default config.")
-@pass_ns
-def cli_raw_process(ns, input_files, output_path, config):
+def parse_raw_files(input_files, config=None):
     config = shrad.utils.merge_config(config=config)
     shrad.utils.init_logger(config)
 
@@ -96,24 +91,18 @@ def cli_raw_process(ns, input_files, output_path, config):
     isort = np.argsort(raw_dates)
     raw_dates = np.array(raw_dates)[isort]
     raw_files = np.array(raw_files)[isort]
+    return raw_dates, raw_files
 
-    ns.update({
-        "input_files": raw_files,
-        "input_dates": raw_dates,
-        "config": config
-    })
-
-@cli_raw_process.command("l1a")
+@cli_raw.command("tol1a")
+@click.argument("input_files", nargs=-1)
 @click.argument("output_path", nargs=1)
 @click.option("--config", "-c", type=click.Path(dir_okay=False, exists=True),
               help="Config file - will merge and override the default config.")
-@pass_ns
-def raw2l1a(ns, output_path: str, config):
+def raw2l1a(input_files, output_path: str, config):
+    """Process raw files to level 1a.
+    """
     config = shrad.utils.merge_config(config=config)
-    if "config" in ns:
-        # override and merge with ns config
-        config = {**ns["config"], **config}
-    input_files = ns["input_files"]
+    input_dates, input_files = parse_raw_files(input_files, config)
 
     ### TODO: interate over unique days
     with click.progressbar(input_files, label='Processing to l1a:', item_show_func=lambda a: os.path.basename(a) if a is not None else "") as files:
