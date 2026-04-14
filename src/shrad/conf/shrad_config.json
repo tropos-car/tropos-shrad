@@ -18,9 +18,8 @@
     "EsTemp": "sensor_temp",
     "BioGpsLatitude": "lat",
     "BioGpsLongitude": "lon",
-    ""
     "SolarZenithAngle": "szen",
     "SolarAzimuthAngle": "sazi"
   }
-  "raw"
+
 }
