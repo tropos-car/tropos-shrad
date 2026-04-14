@@ -1,0 +1,26 @@
+// DEFAULT PROCESSING CONFIGURATION of shrad
+// It is recommended to create a separate config.json including
+//  at least specific project meta information.
+{
+  "path_sfx": "{dt:%Y/%m/}",
+  "fname_raw": "{campaign}_GUV_{serial}_{type}_{dt:%y%m%d}.{sfx}",
+  "fname_out" : "{dt:%Y-%m-%d}_shrad_{campaign}_{resolution}_{datalvl}.c{collection:02d}.{sfx}",
+  
+  // Config Files
+  "file_log": "shrad.log",
+  "file_cfmeta": "share/shrad_cfmeta.json",
+  "file_calibration": "share/shrad_calibrations.json",
+  
+  // Raw processing
+  "raw_key_mapping": {
+    "EsRoll": "roll",
+    "EsPitch": "pitch",
+    "EsTemp": "sensor_temp",
+    "BioGpsLatitude": "lat",
+    "BioGpsLongitude": "lon",
+    ""
+    "SolarZenithAngle": "szen",
+    "SolarAzimuthAngle": "sazi"
+  }
+  "raw"
+}

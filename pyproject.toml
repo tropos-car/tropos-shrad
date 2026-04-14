@@ -1,0 +1,51 @@
+[build-system]
+requires = ["setuptools", "wheel", "setuptools_scm"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "shrad"
+dynamic = ["version"]
+description = "Post-processing algorithm for the GUVis-3511 shadow-band radiometer. Spectral irradiance components and aerosol optical depth."
+authors = [
+    {name = "Jonas Witthuhn", email = "witthuhn@tropos.de"}
+]
+license = {text = "GNU General Public License v3 (GPLv3)"}
+requires-python = ">=3.10"
+dependencies = [
+    "numpy",
+    "xarray",
+    "netcdf4",
+    "pip",
+    "jstyleson",
+    "Click",
+    "toolz",
+    "addict",
+    "bottleneck",
+    "trosat-base @ git+https://github.com/hdeneke/trosat-base.git#egg=trosat-base",
+    "argparse",
+    "configparser",
+    "pandas",
+    "psycopg2-binary",
+    "parse>=1.20.0",
+    "unitpy",
+    "scipy",
+    "matplotlib"
+]
+
+[project.optional-dependencies]
+nbs = ["jupyter", "nbdev", "nbformat"]
+docs = ["sphinx", "myst-parser", "myst-nb"]
+
+[project.entry-points.console_scripts]
+shrad = "shrad.click:cli"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+include = ["shrad"]
+
+[tool.setuptools.package-data]
+shrad = ["share/*.json", "share/*.csv", "conf/*.json"]
+
+[tool.setuptools_scm]
+local_scheme = "dirty-tag"
+write_to = "src/shrad/_version.py" 
